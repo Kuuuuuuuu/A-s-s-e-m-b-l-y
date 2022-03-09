@@ -68,12 +68,12 @@ division:
 	jmp result
 
 modulo:
-	pop rsi
-	call charint
-	mov r10, rax
-	pop rsi
-	call charint
-	mov r11, rax
+    pop rsi
+    call charint
+    mov r10, rax
+    pop rsi
+    call charint
+    mov r11, rax
     mov rax, r10
     mov rdx, 0
     div r11
@@ -82,21 +82,21 @@ modulo:
 
 
 result:
-	call intchar
-	mov rax, 1
-	mov rdi, 1
-	mov rsi, r9
-	mov rdx, r11
-	syscall
-	jmp exit
+   call intchar
+   mov rax, 1
+   mov rdi, 1
+   mov rsi, r9
+   mov rdx, r11
+   syscall
+   jmp exit
 
 args:
-	mov rdi, FEW_ARGS
-	call print_error
+   mov rdi, FEW_ARGS
+   call print_error
 
 invalid:
-	mov rdi, INVALID_OPERAND
-	call print_error
+   mov rdi, INVALID_OPERAND
+   call print_error
 
 print_error:
 	push rdi
