@@ -5,9 +5,9 @@ section .data
 
 section .text
 
-	global _start
+	global start
 
-_start:
+start:
 	pop rdx
 	cmp rdx, 4
 	jne args
@@ -34,7 +34,7 @@ addition:
 	pop rsi
 	call charint
 	add rax, r10
-	jmp print_result
+	jmp result
 
 subtraction:
 	pop rsi
@@ -44,7 +44,7 @@ subtraction:
 	call charint
 	sub r10, rax
 	mov rax, r10
-	jmp print_result
+	jmp result
 
 multiplication:
 	pop rsi
@@ -53,7 +53,7 @@ multiplication:
 	pop rsi
 	call charint
 	mul r10
-	jmp print_result
+	jmp result
 
 division:
 	pop rsi
@@ -65,24 +65,24 @@ division:
 	mov rax, r10
 	mov rdx, 0
 	div r11
-	jmp print_result
+	jmp result
 
 modulo:
 	pop rsi
-	call char_to_int
+	call charint
 	mov r10, rax
 	pop rsi
-	call char_to_int
+	call charint
 	mov r11, rax
     mov rax, r10
     mov rdx, 0
     div r11
     mov rax, rdx
-    jmp print_result
+    jmp result
 
 
-print_result:
-	call int_to_char
+result:
+	call intchar
 	mov rax, 1
 	mov rdi, 1
 	mov rsi, r9
@@ -111,12 +111,12 @@ print_error:
 
 strlen:
 	xor rax, rax
-.strlen_loop:
+.strlen_l:
 	cmp BYTE [rdi + rax], 0xA
-	je .strlen_break
+	je .strlen_b
 	inc rax
-	jmp .strlen_loop
-.strlen_break:
+	jmp .strlen_l
+.strlen_b:
 	inc rax
 	ret
 
@@ -128,7 +128,7 @@ charint:
 .loop_block:
 	mov cl, [rsi]
 	cmp cl, byte 0
-	je .return_block
+	je .rblock
 	cmp cl, 0x30
 	jl invalid
 	cmp cl, 0x39
@@ -137,12 +137,12 @@ charint:
   mul bx
 	add ax, cx
 	inc rsi
-	jmp .loop_block
+	jmp .lblock
 
 .return_block:
 	ret
 
-int_to_char:
+intchar:
 	mov rbx, 10
 	mov r9, BYTE_BUFFER+10
 	mov [r9], byte 0
@@ -151,18 +151,18 @@ int_to_char:
 	dec r9
 	mov r11, 2
 
-.loop_block:
+.lblock:
 	mov rdx, 0
 	div rbx
 	cmp rax, 0
-	je .return_block
+	je .rblock
 	add dl, 48
 	mov [r9], dl
 	dec r9
 	inc r11
-	jmp .loop_block
+	jmp .lblock
 
-.return_block: 
+.rblock: 
 	add dl, 48
 	mov [r9], dl
 	dec r9
